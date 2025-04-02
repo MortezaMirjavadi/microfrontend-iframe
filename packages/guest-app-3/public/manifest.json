@@ -1,0 +1,22 @@
+{
+  "id": "app3",
+  "name": "Vue Analytics",
+  "description": "Analytics dashboard built with Vue 3",
+  "version": "1.0.0",
+  "entryUrl": "http://localhost:5176",
+  "routeRegex": "^\\/app3(\\/.*)?$",
+  "menuItems": [
+    {
+      "id": "dashboard",
+      "label": "Dashboard",
+      "path": "/dashboard",
+      "icon": "📊"
+    },
+    {
+      "id": "reports",
+      "label": "Reports",
+      "path": "/reports",
+      "icon": "📝"
+    }
+  ]
+}

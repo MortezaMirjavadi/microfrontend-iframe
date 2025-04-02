@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json", // Inherit from the main tsconfig for this package
+  "compilerOptions": {
+    "outDir": "dist", // Specify output directory
+    "noEmit": false, // Allow emitting files
+    "declaration": true, // Generate .d.ts files
+    "declarationMap": true, // Generate sourcemaps for .d.ts files
+    "sourceMap": true, // Generate .js.map files for debugging
+    // --- Emit both CJS and MJS (Requires TS 5.0+ and careful setup) ---
+    // This is a bit more advanced. A simpler approach might be to just emit ESNext
+    // and let consumers bundle it. But for true CJS/ESM dual package:
+    // 1. You might need separate TSC runs or use a build tool like `tsup`
+    // 2. The setup below is a basic attempt with just `tsc`:
+    // Run tsc twice, once for CJS and once for MJS, or use a build tool.
+    // For simplicity here, let's just emit ESNext and users can bundle.
+    // Remove "main": "./dist/index.js" from package.json if only emitting ESM.
+    // Update: Let's configure tsc to try and emit both (Needs careful testing)
+    // Set "module" to "NodeNext" in tsconfig.json to better support dual emit.
+    // However, tsc alone doesn't easily emit *both* CJS and MJS from the same run.
+    // Recommendation: Use `tsup` or just emit ESM (`"module": "ESNext"`).
+    // Let's stick to emitting ESM primarily for Vite compatibility.
+     "module": "ESNext", // Primary output format
+    // If you need CJS, consider using `tsup` or configuring separate build steps.
+
+     // --- Resetting options that shouldn't affect build output ---
+     "composite": false, // Not needed for the final build config usually
+     "noEmit": false // MUST be false to actually build
+  },
+  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
+}

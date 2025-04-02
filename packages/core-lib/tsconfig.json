@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.base.json", // Inherit from root base
+  "compilerOptions": {    "composite": true, // Useful in monorepos with project references if needed
+    "rootDir": "src",
+  },
+  "include": ["src/**/*.ts"], // Only include source files
+  "exclude": ["node_modules", "dist"] // Exclude build output and deps
+}

@@ -1,0 +1,15 @@
+{
+  // Inherit base or app tsconfig, adjust as needed
+  "extends": "./tsconfig.json", // Or "../../tsconfig.base.json"
+  "compilerOptions": {
+    "composite": true, // Required for project references
+    "skipLibCheck": true,
+    "module": "ESNext",
+    // Ensure moduleResolution matches the main config ('bundler' recommended)
+    "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true // Don't emit JS from this config check
+  },
+  // Only include Node-specific config files here
+  "include": ["vite.config.ts"]
+}

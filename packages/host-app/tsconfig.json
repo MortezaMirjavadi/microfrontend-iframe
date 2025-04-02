@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "isolatedModules": true,
+    "noEmit": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "types": ["vite/client"]
+    // If using paths defined in tsconfig.base.json:
+    // "baseUrl": ".",
+    // "paths": {
+    //   "@microfrontend-iframe/core-lib/*": ["../core-lib/src/*"] // Adjust relative path
+    // },
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
+  // "references": [{ "path": "../core-lib" }], // <-- REMOVE OR COMMENT OUT THIS LINE
+  "exclude": ["node_modules", "dist"]
+}
