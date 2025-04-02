@@ -12,5 +12,19 @@
       "label": "Settings",
       "path": "/settings"
     }
+  ],
+  "bottomSheetRoutes": [
+    {
+      "id": "user-settings",
+      "label": "User Settings",
+      "path": "/settings/user",
+      "description": "Open user settings in a bottom sheet"
+    },
+    {
+      "id": "quick-dashboard",
+      "label": "Quick Dashboard",
+      "path": "/dashboard",
+      "description": "View dashboard in a bottom sheet"
+    }
   ]
 }
