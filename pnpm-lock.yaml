@@ -48,7 +48,18 @@ importers:
         specifier: ^5.3.0
         version: 5.8.2
 
-  packages/core-lib: {}
+  packages/core-lib:
+    dependencies:
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+      vue:
+        specifier: ^3.3.4
+        version: 3.5.13(typescript@5.8.2)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.3.20
 
   packages/guest-app-1:
     dependencies:
@@ -3181,6 +3192,12 @@ snapshots:
       '@vue/shared': 3.5.13
       vue: 3.5.13(typescript@5.2.2)
 
+  '@vue/server-renderer@3.5.13(vue@3.5.13(typescript@5.8.2))':
+    dependencies:
+      '@vue/compiler-ssr': 3.5.13
+      '@vue/shared': 3.5.13
+      vue: 3.5.13(typescript@5.8.2)
+
   '@vue/shared@3.5.13': {}
 
   '@vue/tsconfig@0.4.0': {}
@@ -4816,6 +4833,16 @@ snapshots:
       '@vue/shared': 3.5.13
     optionalDependencies:
       typescript: 5.2.2
+
+  vue@3.5.13(typescript@5.8.2):
+    dependencies:
+      '@vue/compiler-dom': 3.5.13
+      '@vue/compiler-sfc': 3.5.13
+      '@vue/runtime-dom': 3.5.13
+      '@vue/server-renderer': 3.5.13(vue@3.5.13(typescript@5.8.2))
+      '@vue/shared': 3.5.13
+    optionalDependencies:
+      typescript: 5.8.2
 
   which-boxed-primitive@1.1.1:
     dependencies:

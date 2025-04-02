@@ -187,7 +187,7 @@ useRouteSync(
 
 ### Prerequisites
 
-- Node.js 16+ and npm
+- Node.js 16+ and pnpm
 - Modern browser (Chrome, Firefox, Edge, Safari)
 
 ### Installation
@@ -195,27 +195,27 @@ useRouteSync(
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/yourusername/micro-frontend-framework.git
-   cd micro-frontend-framework
+   git clone https://github.com/MortezaMirjavadi/microfrontend-iframe.git
+   cd microfrontend-iframe
    ```
 
 2. Install dependencies for all packages:
 
    ```bash
-   npm install
+   pnpm install
    ```
 
 3. Start the development servers:
 
    ```bash
    # Start all apps in parallel
-   npm run start
+   pnpm run start
    
    # Or start individual apps
-   npm run start:host
-   npm run start:guest-app-1
-   npm run start:guest-app-2
-   npm run start:guest-app-3
+   pnpm run start:host
+   pnpm run start:guest-app-1
+   pnpm run start:guest-app-2
+   pnpm run start:guest-app-3
    ```
 
 4. Open your browser and navigate to `http://localhost:5173`
@@ -234,8 +234,8 @@ useRouteSync(
 # Create a new React app
 mkdir -p packages/guest-app-4
 cd packages/guest-app-4
-npm create vite@latest . -- --template react-ts
-npm install
+pnpm create vite@latest . -- --template react-ts
+pnpm install
 ```
 
 Add a manifest.json in the public directory and integrate with the core library as shown in the React integration example above.
@@ -246,7 +246,7 @@ Each package includes its own tests that can be run with:
 
 ```bash
 cd packages/[package-name]
-npm test
+pnpm test
 ```
 
 ## 🤝 Contributing
@@ -297,3 +297,6 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 │  └─────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────┘
 ```
+---
+
+Built with ❤️ by [Morteza Mirjavadi](https://github.com/MortezaMirjavadi)

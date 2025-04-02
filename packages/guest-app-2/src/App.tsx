@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useReactRouteSync } from "../../core-lib/src/adapters/react";
+
 import {
   Routes,
   Route,
@@ -81,42 +82,7 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log("Guest App 2 rendering at path:", location.pathname);
-
-  useEffect(() => {
-    const handleNavigation = (event: CustomEvent<{ path: string }>) => {
-      const path = event.detail.path;
-      console.log(`Received navigation request to: ${path}`);
-
-      if (location.pathname !== path) {
-        console.log(`Navigating from ${location.pathname} to ${path}`);
-        navigate(path);
-      }
-    };
-
-    window.addEventListener("appNavigation", handleNavigation as EventListener);
-    return () => {
-      window.removeEventListener(
-        "appNavigation",
-        handleNavigation as EventListener
-      );
-    };
-  }, [navigate, location.pathname]);
-
-  useEffect(() => {
-    console.log(`Route changed to: ${location.pathname}`);
-
-    if (window.parent !== window) {
-      window.parent.postMessage(
-        {
-          type: "routeChange",
-          path: location.pathname,
-          appId: "app2",
-        },
-        hostOrigin
-      );
-    }
-  }, [location.pathname]);
+  useReactRouteSync(location.pathname, navigate);
 
   return (
     <div>

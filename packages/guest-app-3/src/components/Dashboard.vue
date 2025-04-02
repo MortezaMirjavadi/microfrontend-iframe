@@ -13,6 +13,15 @@
       </div>
     </div>
     <p>Current path: {{ $route.path }}</p>
+    <div class="actions">
+      <BottomSheetOpener 
+        appId="app2" 
+        path="/products" 
+        height="70vh"
+      >
+        Open Product Catalog
+      </BottomSheetOpener>
+    </div>
   </div>
 </template>
 

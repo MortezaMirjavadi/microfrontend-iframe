@@ -14,7 +14,13 @@
     "watch": "tsc --project tsconfig.build.json --watch",
     "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0"
   },
-  "devDependencies": {},
+  "dependencies": {
+    "react": "^18.2.0",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56"
+  },
   "keywords": [
     "microfrontend",
     "core",
