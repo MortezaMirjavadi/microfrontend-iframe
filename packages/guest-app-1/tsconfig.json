@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "types": ["vite/client"],
+    "paths": {
+      "@microfrontend-iframe/core-lib": ["packages/core-lib/src"],
+      "@microfrontend-iframe/core-lib/*": ["packages/core-lib/src/*"]
+    }
+  }
+}

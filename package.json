@@ -1,0 +1,35 @@
+{
+  "name": "microfrontend-iframe",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Monorepo for Host/Guest iframe microfrontend",
+  "license": "MIT",
+  "scripts": {
+    "dev": "pnpm --parallel --filter \"./packages/**\" dev",
+    "build": "pnpm --filter \"./packages/**\" build",
+    "build:core": "pnpm --filter @microfrontend-iframe/core-lib build",
+    "dev:host": "pnpm --filter @microfrontend-iframe/host-app dev",
+    "dev:guest1": "pnpm --filter @microfrontend-iframe/guest-app-1 dev",
+    "dev:guest2": "pnpm --filter @microfrontend-iframe/guest-app-2 dev",
+    "lint": "pnpm --filter \"./packages/**\" lint"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "prettier": "^3.2.5",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "app2",
+  "name": "Product Catalog",
+  "entryUrl": "http://localhost:5175",
+  "routeRegex": "^/app2(/.*)?$",
+  "menuItems": [
+    {
+      "label": "All Products",
+      "path": "/products",
+      "icon": "inventory"
+    },
+    {
+      "label": "Categories",
+      "path": "/categories",
+      "icon": "category"
+    },
+    {
+      "label": "Featured",
+      "path": "/products/featured",
+      "icon": "star"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "id": "app1",
+  "name": "Dashboard App",
+  "entryUrl": "http://localhost:5174",
+  "routeRegex": "^/app1(/.*)?$",
+  "menuItems": [
+    {
+      "label": "Overview",
+      "path": "/dashboard"
+    },
+    {
+      "label": "Settings",
+      "path": "/settings"
+    }
+  ]
+}

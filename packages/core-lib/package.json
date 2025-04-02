@@ -1,0 +1,26 @@
+{
+  "name": "@microfrontend-iframe/core-lib",
+  "version": "0.1.0",
+  "description": "Core types and communication functions for iframe microfrontend",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rimraf dist && tsc --project tsconfig.build.json",
+    "watch": "tsc --project tsconfig.build.json --watch",
+    "lint": "eslint . --ext ts --report-unused-disable-directives --max-warnings 0"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "microfrontend",
+    "core",
+    "iframe",
+    "communication",
+    "types"
+  ],
+  "license": "ISC"
+}
