@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { GuestManifest } from "@microfrontend-iframe/core-lib/types";
+import { createDevProxy } from "@microfrontend-iframe/core-lib/proxy";
 
 interface GuestFrameProps {
   activeGuest: GuestManifest | null;
@@ -15,7 +16,19 @@ const GuestFrame: React.FC<GuestFrameProps> = ({ activeGuest, guestPath }) => {
     null
   );
 
-  const baseIframeSrc = activeGuest ? activeGuest.entryUrl : undefined;
+  const proxy = activeGuest?.proxy
+    ? createDevProxy({
+        prodUrl: activeGuest.entryUrl,
+        proxy: activeGuest.proxy,
+        debug: true,
+      })
+    : null;
+
+  const baseUrl = proxy?.isEnabled()
+    ? proxy.getDevUrl()
+    : activeGuest?.entryUrl;
+
+  const iframeSrc = baseUrl || undefined;
 
   useEffect(() => {
     if (activeGuest && activeGuest.id !== currentGuestId) {
@@ -25,12 +38,18 @@ const GuestFrame: React.FC<GuestFrameProps> = ({ activeGuest, guestPath }) => {
       setLastNavigatedPath(null);
 
       if (iframeRef.current) {
-        iframeRef.current.src = baseIframeSrc!;
+        iframeRef.current.src = iframeSrc!;
       }
     }
-  }, [activeGuest?.id, baseIframeSrc, currentGuestId]);
+  }, [activeGuest?.id, iframeSrc, currentGuestId]);
 
+  // Effect to handle navigation within the same app
   useEffect(() => {
+    // Only send navigation message if:
+    // 1. We have an active guest
+    // 2. The iframe is already loaded
+    // 3. We're not in the middle of switching apps
+    // 4. The path has actually changed
     if (
       activeGuest &&
       !isLoading &&
@@ -48,7 +67,7 @@ const GuestFrame: React.FC<GuestFrameProps> = ({ activeGuest, guestPath }) => {
           path: guestPath,
           id: uuidv4(),
         },
-        baseIframeSrc!
+        baseUrl!
       );
 
       setLastNavigatedPath(guestPath);
@@ -59,11 +78,13 @@ const GuestFrame: React.FC<GuestFrameProps> = ({ activeGuest, guestPath }) => {
     isLoading,
     currentGuestId,
     lastNavigatedPath,
-    baseIframeSrc,
+    baseUrl,
   ]);
 
   const handleIframeLoad = () => {
-    console.log(`Iframe loaded for app: ${activeGuest?.id}`);
+    console.log(
+      `Iframe loaded for app: ${activeGuest?.id} using ${proxy?.isEnabled() ? "DEV" : "PROD"} mode`
+    );
     setIsLoading(false);
 
     if (activeGuest && iframeRef.current?.contentWindow) {
@@ -79,7 +100,7 @@ const GuestFrame: React.FC<GuestFrameProps> = ({ activeGuest, guestPath }) => {
               path: guestPath,
               id: uuidv4(),
             },
-            baseIframeSrc!
+            baseUrl!
           );
 
           setLastNavigatedPath(guestPath);
@@ -88,29 +109,7 @@ const GuestFrame: React.FC<GuestFrameProps> = ({ activeGuest, guestPath }) => {
     }
   };
 
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (
-        activeGuest &&
-        event.origin === new URL(activeGuest.entryUrl).origin
-      ) {
-        const message = event.data;
-
-        if (message.type === "routeChange") {
-          console.log(
-            `Guest app ${activeGuest.id} changed route to: ${message.path}`
-          );
-        }
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, [activeGuest]);
-
-  if (!activeGuest || !baseIframeSrc) {
+  if (!activeGuest || !iframeSrc) {
     return <div>Select an application from the menu.</div>;
   }
 
@@ -135,10 +134,28 @@ const GuestFrame: React.FC<GuestFrameProps> = ({ activeGuest, guestPath }) => {
         </div>
       )}
 
+      {proxy?.isEnabled() && (
+        <div
+          style={{
+            position: "absolute",
+            top: "10px",
+            right: "10px",
+            background: "#ff9800",
+            color: "white",
+            padding: "5px 10px",
+            borderRadius: "4px",
+            fontSize: "12px",
+            zIndex: 100,
+          }}
+        >
+          DEV MODE
+        </div>
+      )}
+
       <iframe
         ref={iframeRef}
-        src={baseIframeSrc}
-        key={activeGuest.id}
+        src={iframeSrc}
+        key={`${activeGuest.id}-${proxy?.isEnabled() ? "dev" : "prod"}`}
         title={activeGuest.name}
         onLoad={handleIframeLoad}
         style={{

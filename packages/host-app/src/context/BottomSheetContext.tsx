@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { GuestManifest } from "../../../core-lib/src/types";
+import { GuestManifest } from "@microfrontend-iframe/core-lib/types";
 import BottomSheet from "../components/BottomSheet";
 import { useManifests } from "../hooks/useManifests";
 
@@ -75,7 +75,7 @@ export const BottomSheetProvider: React.FC<BottomSheetProviderProps> = ({
   const openBottomSheet = (
     guestApp: GuestManifest,
     path = "/",
-    height = "50vh"
+    height: string | number = "50vh"
   ) => {
     setCurrentApp(guestApp);
     setCurrentPath(path);

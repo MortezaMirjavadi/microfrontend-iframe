@@ -73,6 +73,7 @@ export interface MicroFrontendClientConfig {
   guestId: string;
   hostOrigin?: string;
   debug?: boolean;
+  devMode?: boolean;
 }
 
 /**
@@ -87,6 +88,7 @@ export class MicroFrontendClient {
   private readyCallbacks: Array<() => void> = [];
   private bottomSheetModeCallbacks: Array<(isBottomSheet: boolean) => void> =
     [];
+  private devMode: boolean;
 
   /**
    * Creates a new MicroFrontendClient instance
@@ -100,10 +102,19 @@ export class MicroFrontendClient {
         : window.location.origin);
     this.debug = config.debug || false;
     this.isInIframe = window.parent !== window;
+    this.devMode = config.devMode || false;
 
-    this.log("Initializing MicroFrontendClient");
+    this.log("Initializing MicroFrontendClient", { devMode: this.devMode });
     this.setupMessageListener();
     this.sendReadyMessage();
+  }
+
+  /**
+   * Checks if the app is running in development mode
+   * @returns True if the app is in development mode
+   */
+  isDevMode(): boolean {
+    return this.devMode;
   }
 
   /**
@@ -120,7 +131,6 @@ export class MicroFrontendClient {
    */
   private setupMessageListener(): void {
     window.addEventListener("message", (event: MessageEvent) => {
-      // SECURITY: Verify the origin
       if (event.origin !== this.hostOrigin) {
         this.log(
           `Message ignored from unexpected origin: ${event.origin}, expected ${this.hostOrigin}`
@@ -153,14 +163,12 @@ export class MicroFrontendClient {
   private handleNavigateMessage(message: NavigateMessage): void {
     this.log(`Received navigation request to: ${message.path}`);
 
-    // Dispatch a custom event for the route change
     window.dispatchEvent(
       new CustomEvent("mf-navigate", {
         detail: { path: message.path, id: message.id },
       })
     );
 
-    // Notify all registered callbacks
     this.routeChangeCallbacks.forEach((callback) => {
       try {
         callback(message.path);
@@ -176,10 +184,8 @@ export class MicroFrontendClient {
   private handleHandshakeMessage(message: HandshakeMessage): void {
     this.log("Received handshake:", message);
 
-    // Send a ready message
     this.sendReadyMessage(message.payload.guestPath);
 
-    // If a path was provided, navigate to it
     if (message.payload.guestPath) {
       this.handleNavigateMessage({
         type: "navigate",
@@ -195,14 +201,12 @@ export class MicroFrontendClient {
   private handleBottomSheetModeMessage(message: BottomSheetModeMessage): void {
     this.log("Bottom sheet mode:", message.payload.isBottomSheet);
 
-    // Dispatch a custom event
     window.dispatchEvent(
       new CustomEvent("mf-bottomsheet", {
         detail: message.payload,
       })
     );
 
-    // Notify all registered callbacks
     this.bottomSheetModeCallbacks.forEach((callback) => {
       try {
         callback(message.payload.isBottomSheet);
@@ -229,11 +233,11 @@ export class MicroFrontendClient {
         type: "ready",
         guestId: this.guestId,
         currentPath: path,
+        devMode: this.devMode,
       } as ReadyMessage,
       this.hostOrigin
     );
 
-    // Notify all registered callbacks
     this.readyCallbacks.forEach((callback) => {
       try {
         callback();
@@ -303,7 +307,6 @@ export class MicroFrontendClient {
   onRouteChange(callback: (path: string) => void): () => void {
     this.routeChangeCallbacks.push(callback);
 
-    // Return a function to unregister the callback
     return () => {
       this.routeChangeCallbacks = this.routeChangeCallbacks.filter(
         (cb) => cb !== callback
@@ -318,7 +321,6 @@ export class MicroFrontendClient {
   onReady(callback: () => void): () => void {
     this.readyCallbacks.push(callback);
 
-    // Return a function to unregister the callback
     return () => {
       this.readyCallbacks = this.readyCallbacks.filter((cb) => cb !== callback);
     };
@@ -331,18 +333,23 @@ export class MicroFrontendClient {
   onBottomSheetMode(callback: (isBottomSheet: boolean) => void): () => void {
     this.bottomSheetModeCallbacks.push(callback);
 
-    // Return a function to unregister the callback
     return () => {
       this.bottomSheetModeCallbacks = this.bottomSheetModeCallbacks.filter(
         (cb) => cb !== callback
       );
     };
   }
+
+  /**
+   * Sets whether the app is in development mode
+   * @param devMode Whether the app is in development mode
+   */
+  setDevMode(devMode: boolean): void {
+    this.devMode = devMode;
+    this.log(`Dev mode ${devMode ? "enabled" : "disabled"}`);
+  }
 }
 
-/**
- * Creates a new MicroFrontendClient instance
- */
 export function createMicroFrontendClient(
   config: MicroFrontendClientConfig
 ): MicroFrontendClient {

@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import { GuestManifest, MenuItem } from "@microfrontend-iframe/core-lib/types";
 import { useManifests } from "./hooks/useManifests";
@@ -7,11 +7,19 @@ import SidebarMenu from "./components/SidebarMenu";
 import Layout from "./components/Layout";
 import { BottomSheetProvider } from "./context/BottomSheetContext";
 import AppLauncher from "./components/AppLauncher";
+import DevModeToggle from "./components/DevModeToggle";
 
 function App() {
-  const { manifests, loading, error } = useManifests();
+  const { manifests: originalManifests, loading, error } = useManifests();
+  const [manifests, setManifests] = useState<GuestManifest[]>([]);
   const location = useLocation();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (originalManifests.length > 0) {
+      setManifests(originalManifests);
+    }
+  }, [originalManifests]);
 
   const { activeGuest, guestPath } = useMemo(() => {
     if (loading || error || manifests.length === 0) {
@@ -51,20 +59,22 @@ function App() {
     [navigate]
   );
 
-  const handleGuestRouteChange = useCallback(
-    (guestId: string, path: string) => {
-      const manifest = manifests.find((m) => m.id === guestId);
-      if (!manifest) return;
-
-      const regexMatch = manifest.routeRegex.match(/^\^(\/[^/(?]+)/);
-      const basePath = regexMatch ? regexMatch[1] : `/${manifest.id}`;
-
-      const newUrl = `${basePath}${path}`;
-
-      window.history.replaceState(null, "", newUrl);
-    },
-    [manifests]
-  );
+  const handleDevModeToggle = useCallback((appId: string, enabled: boolean) => {
+    setManifests((prev: any) =>
+      prev.map((app: any) => {
+        if (app.id === appId && app.proxy) {
+          return {
+            ...app,
+            proxy: {
+              ...app.proxy,
+              enabled,
+            },
+          };
+        }
+        return app;
+      })
+    );
+  }, []);
 
   if (loading) return <div>Loading configuration...</div>;
   if (error) return <div>Error: {error}</div>;
@@ -87,23 +97,7 @@ function App() {
           />
         )}
 
-        <div
-          style={{
-            position: "fixed",
-            bottom: "10px",
-            right: "10px",
-            background: "#333",
-            color: "white",
-            padding: "10px",
-            borderRadius: "4px",
-            fontSize: "12px",
-            zIndex: 1000,
-          }}
-        >
-          <div>Active Guest: {activeGuest?.id || "None"}</div>
-          <div>Path: {guestPath}</div>
-          <div>URL: {window.location.pathname}</div>
-        </div>
+        <DevModeToggle manifests={manifests} onToggle={handleDevModeToggle} />
       </Layout>
     </BottomSheetProvider>
   );

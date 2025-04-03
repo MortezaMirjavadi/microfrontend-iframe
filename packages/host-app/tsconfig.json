@@ -1,18 +1,24 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "rootDir": "src",
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["vite/client"]
-    // If using paths defined in tsconfig.base.json:
-    // "baseUrl": ".",
-    // "paths": {
-    //   "@microfrontend-iframe/core-lib/*": ["../core-lib/src/*"] // Adjust relative path
-    // },
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    
+    "rootDir": "./src", 
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
-  // "references": [{ "path": "../core-lib" }], // <-- REMOVE OR COMMENT OUT THIS LINE
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { GuestManifest } from "../../../core-lib/src/types";
+import { GuestManifest } from "@microfrontend-iframe/core-lib/types";
 import { useBottomSheet } from "../context/BottomSheetContext";
 
 interface BottomSheetButtonProps {

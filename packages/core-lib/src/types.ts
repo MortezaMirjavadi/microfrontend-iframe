@@ -1,15 +1,34 @@
 export interface MenuItem {
+  id: string;
   label: string;
   path: string;
   icon?: string;
 }
 
+export interface ProxyConfig {
+  enabled: boolean;
+  devServerUrl: string;
+  pathRewrite?: Record<string, string>;
+  headers?: Record<string, string>;
+}
+
 export interface GuestManifest {
   id: string;
   name: string;
+  description: string;
+  version: string;
   entryUrl: string;
   routeRegex: string;
   menuItems: MenuItem[];
+  bottomSheetRoutes?: BottomSheetRoute[];
+  proxy?: ProxyConfig;
+}
+
+export interface BottomSheetRoute {
+  id: string;
+  label: string;
+  path: string;
+  description?: string;
 }
 
 export interface NavigateMessage {

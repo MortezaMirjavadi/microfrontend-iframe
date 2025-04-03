@@ -2,28 +2,32 @@ import { GuestManifest } from "@microfrontend-iframe/core-lib/types";
 
 const manifestCache: Record<string, GuestManifest> = {};
 
-export async function fetchManifest(
-  url: string
-): Promise<GuestManifest | null> {
-  try {
-    if (manifestCache[url]) {
-      console.log(`Using cached manifest for ${url}`);
-      return manifestCache[url];
-    }
+const DEFAULT_MANIFEST_URLS = [
+  "http://localhost:5174/manifest.json",
+  "http://localhost:5175/manifest.json",
+  "http://localhost:5176/manifest.json",
+];
 
-    console.log(`Fetching manifest from ${url}`);
-    const response = await fetch(url);
+async function fetchManifest(url: string): Promise<GuestManifest | null> {
+  try {
+    console.log(`Fetching manifest from: ${url}`);
+    const response = await fetch(url, {
+      headers: {
+        Accept: "application/json",
+        "Cache-Control": "no-cache",
+      },
+    });
 
     if (!response.ok) {
-      console.error(
-        `Failed to fetch manifest from ${url}: ${response.statusText}`
+      console.warn(
+        `Failed to fetch manifest from ${url}: ${response.status} ${response.statusText}`
       );
       return null;
     }
 
-    const manifest = (await response.json()) as GuestManifest;
-    manifestCache[url] = manifest;
-    return manifest;
+    const manifest = await response.json();
+    console.log(`Successfully loaded manifest for: ${manifest.name}`);
+    return manifest as GuestManifest;
   } catch (error) {
     console.error(`Error fetching manifest from ${url}:`, error);
     return null;
@@ -80,4 +84,39 @@ export async function getManifestByAppId(
   }
 
   return fetchManifest(manifestUrl);
+}
+
+/**
+ * Loads all manifests from the configured URLs
+ */
+export async function loadManifests(): Promise<GuestManifest[]> {
+  const manifestUrls = import.meta.env.VITE_MANIFEST_URLS
+    ? JSON.parse(import.meta.env.VITE_MANIFEST_URLS as string)
+    : DEFAULT_MANIFEST_URLS;
+
+  console.log("Loading manifests from:", manifestUrls);
+
+  const manifestPromises = manifestUrls.map(fetchManifest);
+  const results = await Promise.all(manifestPromises);
+
+  const validManifests = results.filter((m) => m !== null) as GuestManifest[];
+
+  console.log(`Loaded ${validManifests.length} valid manifests`);
+  return validManifests;
+}
+
+/**
+ * Gets the base URLs for guest apps
+ */
+export function getGuestBaseUrls(): Record<string, string> {
+  const baseUrlsFromEnv = import.meta.env.VITE_GUEST_BASE_URLS
+    ? JSON.parse(import.meta.env.VITE_GUEST_BASE_URLS as string)
+    : {};
+
+  return {
+    app1: "http://localhost:5174",
+    app2: "http://localhost:5175",
+    app3: "http://localhost:5176",
+    ...baseUrlsFromEnv,
+  };
 }

@@ -5,12 +5,13 @@
   "description": "Monorepo for Host/Guest iframe microfrontend",
   "license": "MIT",
   "scripts": {
-    "dev": "pnpm --parallel --filter \"./packages/**\" dev",
-    "build": "pnpm --filter \"./packages/**\" build",
-    "build:core": "pnpm --filter @microfrontend-iframe/core-lib build",
+    "build": "pnpm --filter @microfrontend-iframe/core-lib build && pnpm --filter @microfrontend-iframe/host-app build",
+    "dev:core": "pnpm --filter @microfrontend-iframe/core-lib dev",
     "dev:host": "pnpm --filter @microfrontend-iframe/host-app dev",
     "dev:guest1": "pnpm --filter @microfrontend-iframe/guest-app-1 dev",
     "dev:guest2": "pnpm --filter @microfrontend-iframe/guest-app-2 dev",
+    "dev:guest3": "pnpm --filter @microfrontend-iframe/guest-app-3 dev",
+    "dev": "concurrently \"pnpm dev:core\" \"pnpm dev:host\" \"pnpm dev:guest1\" \"pnpm dev:guest2\" \"pnpm dev:guest3\"",
     "lint": "pnpm --filter \"./packages/**\" lint"
   },
   "devDependencies": {
@@ -26,7 +27,8 @@
     "eslint-plugin-react-refresh": "^0.4.5",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
-    "typescript": "^5.3.0"
+    "typescript": "^5.3.0",
+    "concurrently": "^8.0.1"
   },
   "engines": {
     "node": ">=18.0.0",

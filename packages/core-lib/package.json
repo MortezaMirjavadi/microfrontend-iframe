@@ -19,7 +19,8 @@
     "vue": "^3.3.4"
   },
   "devDependencies": {
-    "@types/react": "^18.2.56"
+    "@types/react": "^18.2.56",
+    "typescript": "^5.0.2"
   },
   "keywords": [
     "microfrontend",
