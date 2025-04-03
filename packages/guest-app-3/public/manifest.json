@@ -18,5 +18,12 @@
       "path": "/reports",
       "icon": "📝"
     }
-  ]
+  ],
+  "proxy": {
+    "enabled": false,
+    "devServerUrl": "http://localhost:3003",
+    "pathRewrite": {
+      "^/": "/"
+    }
+  }
 }

@@ -1,7 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { GuestManifest, MenuItem } from "@microfrontend-iframe/core-lib/types";
-import { useAppInBottomSheet } from "../hooks/useAppInBottomSheet";
 
 interface SidebarMenuProps {
   manifests: GuestManifest[];
@@ -13,7 +12,6 @@ const SidebarMenu: React.FC<SidebarMenuProps> = ({
   onMenuClick,
 }) => {
   const location = useLocation();
-  const { openApp } = useAppInBottomSheet();
 
   const getIsActive = (manifest: GuestManifest, menuItem: MenuItem) => {
     const regex = new RegExp(manifest.routeRegex);

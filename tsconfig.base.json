@@ -18,8 +18,11 @@
 
     "baseUrl": ".",
     "paths": {
-      "@microfrontend-iframe/core-lib": ["packages/core-lib/src"],
-      "@microfrontend-iframe/core-lib/*": ["packages/core-lib/src/*"]
+      "@microfrontend-iframe/core-lib/*": ["packages/core-lib/src/*"],
+      "@microfrontend-iframe/host-app/*": ["packages/host-app/src/*"],
+      "@microfrontend-iframe/guest-app-1/*": ["packages/guest-app-1/src/*"],
+      "@microfrontend-iframe/guest-app-2/*": ["packages/guest-app-2/src/*"],
+      "@microfrontend-iframe/guest-app-3/*": ["packages/guest-app-3/src/*"]
     }
   },
    "exclude": ["node_modules", "**/dist", "**/*.config.js", "**/*.config.ts"]

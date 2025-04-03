@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GuestManifest } from "../../../core-lib/src/types";
+import { GuestManifest } from "@microfrontend-iframe/core-lib/types";
 import { v4 as uuidv4 } from "uuid";
 
 interface BottomSheetProps {
@@ -81,7 +81,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
         transition: "transform 0.3s ease-in-out",
       }}
     >
-      {/* Header */}
       <div
         style={{
           display: "flex",
@@ -105,7 +104,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
         </button>
       </div>
 
-      {/* Content */}
       <div
         style={{
           flex: 1,
@@ -113,7 +111,6 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
           overflow: "hidden",
         }}
       >
-        {/* Loading indicator */}
         {isLoading && (
           <div
             style={{

@@ -2,7 +2,7 @@
   "id": "app2",
   "name": "Product Catalog",
   "entryUrl": "http://localhost:5175",
-  "routeRegex": "^/app2(/.*)?$",
+  "routeRegex": "^\\/app2(\\/.*)?$",
   "menuItems": [
     {
       "label": "All Products",
@@ -19,5 +19,12 @@
       "path": "/products/featured",
       "icon": "star"
     }
-  ]
+  ],
+  "proxy": {
+    "enabled": true,
+    "devServerUrl": "http://localhost:3002",
+    "pathRewrite": {
+      "^/": "/"
+    }
+  }
 }

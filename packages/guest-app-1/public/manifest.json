@@ -2,7 +2,7 @@
   "id": "app1",
   "name": "Dashboard App",
   "entryUrl": "http://localhost:5174",
-  "routeRegex": "^/app1(/.*)?$",
+  "routeRegex": "^\\/app1(\\/.*)?$",
   "menuItems": [
     {
       "label": "Overview",
@@ -26,5 +26,15 @@
       "path": "/dashboard",
       "description": "View dashboard in a bottom sheet"
     }
-  ]
+  ],
+  "proxy": {
+    "enabled": true,
+    "devServerUrl": "http://localhost:3001",
+    "pathRewrite": {
+      "^/": "/"
+    },
+    "headers": {
+      "X-Dev-Mode": "true"
+    }
+  }
 }
